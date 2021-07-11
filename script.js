@@ -6,6 +6,7 @@ const savedJokes = document.querySelector("#saved-jokes");
 const jokeList = document.querySelector("#joke-list");
 
 let wantsCodingJoke = true; // false denotes dad joke
+let currentJoke = {};
 let jokeArr = [];
 
 REQ_HEADERS = {
@@ -21,6 +22,7 @@ function openModal() {
 function closeModal() {
   jokeSubtitle.innerText = "";
   jokeText.innerText = "";
+  currentJoke = {};
   jokeModal.classList.remove("is-active");
 }
 
@@ -39,8 +41,8 @@ async function seeNewJoke(preference) {
   }
   openModal();
   saveBtn.classList.add("is-loading");
-  // await fetchJoke();
-  jokeText.innerText = await fetchJoke();
+  await fetchJoke();
+  jokeText.innerText = currentJoke.msg;
   saveBtn.classList.remove("is-loading");
 }
 
@@ -52,25 +54,28 @@ async function fetchJoke() {
     );
     let resData = await response.json();
     resData = resData[0];
-    console.log(resData);
-    return resData.setup + "\n" + resData.punchline;
+    currentJoke.id = resData.id.toString();
+    currentJoke.msg = resData.setup + "\n" + resData.punchline;
+    return;
   }
   const response = await fetch("https://icanhazdadjoke.com/", REQ_HEADERS);
   const resData = await response.json();
-  console.log(resData);
-  return resData.joke;
+  currentJoke.id = resData.id;
+  currentJoke.msg = resData.joke;
+  return;
 }
 
 function saveJoke() {
-  const alreadyExists = jokeArr.indexOf(jokeText.innerText) > -1;
+  const alreadyExists = jokeArr.some((j) => j.id === currentJoke.id);
   if (alreadyExists) {
     alert("You already saved that joke");
     return;
   }
+  console.log("this", currentJoke);
   console.log("jokeArr1", jokeArr);
-  jokeArr.push(jokeText.innerText);
+  jokeArr.push(currentJoke);
   console.log("jokeArr2", jokeArr);
-  const listItems = jokeArr.map((joke) => "<li>" + joke + "</li>").join("");
+  const listItems = jokeArr.map((joke) => "<li>" + joke.msg + "</li>").join("");
   jokeList.innerHTML = listItems;
   closeModal();
   savedJokes.classList.remove("is-hidden");
