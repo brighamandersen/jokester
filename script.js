@@ -65,18 +65,38 @@ async function fetchJoke() {
   return;
 }
 
+function reRenderSavedJokes() {
+  if (jokeArr.length === 0) {
+    savedJokes.classList.add("is-hidden");
+    return;
+  }
+
+  const listItems = jokeArr
+    .map(
+      (joke) =>
+        "<li>" +
+        joke.msg +
+        `<button class="delete m-1" onclick="deleteJoke('${joke.id}')"></button>` +
+        "</li>"
+    )
+    .join("");
+  console.log("lis", listItems);
+  jokeList.innerHTML = listItems;
+}
+
 function saveJoke() {
   const alreadyExists = jokeArr.some((j) => j.id === currentJoke.id);
   if (alreadyExists) {
     alert("You already saved that joke");
     return;
   }
-  console.log("this", currentJoke);
-  console.log("jokeArr1", jokeArr);
   jokeArr.push(currentJoke);
-  console.log("jokeArr2", jokeArr);
-  const listItems = jokeArr.map((joke) => "<li>" + joke.msg + "</li>").join("");
-  jokeList.innerHTML = listItems;
+  reRenderSavedJokes();
   closeModal();
   savedJokes.classList.remove("is-hidden");
+}
+
+function deleteJoke(id) {
+  jokeArr = jokeArr.filter((j) => j.id != id);
+  reRenderSavedJokes();
 }
