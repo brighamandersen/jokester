@@ -18,6 +18,7 @@ let currentJoke = {};
 let jokeArr = JSON.parse(localStorage.getItem("jokeArr"));
 if (jokeArr == null) {
   localStorage.setItem("jokeArr", JSON.stringify([]));
+  jokeArr = [];
 }
 if (jokeArr?.length > 0) {
   reRenderSavedJokes();
