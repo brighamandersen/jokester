@@ -6,7 +6,6 @@ const savedJokes = document.querySelector("#saved-jokes");
 const jokeList = document.querySelector("#joke-list");
 
 let wantsCodingJoke = true; // false denotes dad joke
-let currentJoke = {};
 let jokeArr = [];
 
 REQ_HEADERS = {
