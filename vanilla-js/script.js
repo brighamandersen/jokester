@@ -40,9 +40,8 @@ async function seeNewJoke(preference) {
   }
   openModal();
   saveBtn.classList.add("is-loading");
-  await fetchJoke();
-  jokeText.innerText = currentJoke.msg;
-  // jokeText.innerText = await fetchJoke();
+  // await fetchJoke();
+  jokeText.innerText = await fetchJoke();
   saveBtn.classList.remove("is-loading");
 }
 
@@ -54,42 +53,26 @@ async function fetchJoke() {
     );
     let resData = await response.json();
     resData = resData[0];
-    currentJoke.id = resData.id.toString();
-    currentJoke.msg = resData.setup + "\n" + resData.punchline;
-    // console.log("currentJoke", currentJoke);
-    return;
-    // console.log(resData);
-    // // currentJoke = resData;
-    // return resData.setup + "\n" + resData.punchline;
+    console.log(resData);
+    return resData.setup + "\n" + resData.punchline;
   }
   const response = await fetch("https://icanhazdadjoke.com/", REQ_HEADERS);
   const resData = await response.json();
-  // console.log(resData);
-
-  currentJoke.id = resData.id;
-  currentJoke.msg = resData.joke;
-  // console.log("currentJoke", currentJoke);
-  return;
-  // return resData.joke;
+  console.log(resData);
+  return resData.joke;
 }
 
 function saveJoke() {
-  const alreadyExists = jokeArr.indexOf(currentJoke.id) > -1;
+  const alreadyExists = jokeArr.indexOf(jokeText.innerText) > -1;
   if (alreadyExists) {
     alert("You already saved that joke");
     return;
   }
   console.log("jokeArr1", jokeArr);
-  jokeArr.push(currentJoke);
+  jokeArr.push(jokeText.innerText);
   console.log("jokeArr2", jokeArr);
-  const deleteBtn =
-    '<button class="delete m-1" onclick="deleteJoke()"></button>';
-  const listItems = jokeArr
-    .map((joke) => `<li key=${joke.id}>` + joke.msg + deleteBtn + "</li>")
-    .join("");
+  const listItems = jokeArr.map((joke) => "<li>" + joke + "</li>").join("");
   jokeList.innerHTML = listItems;
   closeModal();
   savedJokes.classList.remove("is-hidden");
 }
-
-function deleteJoke() {}
