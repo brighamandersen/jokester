@@ -11,8 +11,8 @@ let jokeArr = [];
 
 REQ_HEADERS = {
   headers: {
-    Accept: "application/json"
-  }
+    Accept: "application/json",
+  },
 };
 
 function openModal() {
