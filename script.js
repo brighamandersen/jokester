@@ -1,3 +1,9 @@
+REQ_HEADERS = {
+  headers: {
+    Accept: "application/json",
+  },
+};
+
 const jokeModal = document.querySelector("#joke-modal");
 const jokeSubtitle = document.querySelector("#joke-subtitle");
 const jokeText = document.querySelector("#joke-text");
@@ -5,15 +11,17 @@ const saveBtn = document.querySelector("#save-btn");
 const savedJokes = document.querySelector("#saved-jokes");
 const jokeList = document.querySelector("#joke-list");
 
+// initial setup
+
 let wantsCodingJoke = true; // false denotes dad joke
 let currentJoke = {};
-let jokeArr = [];
-
-REQ_HEADERS = {
-  headers: {
-    Accept: "application/json",
-  },
-};
+let jokeArr = JSON.parse(localStorage.getItem("jokeArr"));
+if (jokeArr == null) {
+  localStorage.setItem("jokeArr", JSON.stringify([]));
+}
+if (jokeArr?.length > 0) {
+  reRenderSavedJokes();
+}
 
 function openModal() {
   jokeModal.classList.add("is-active");
@@ -71,6 +79,8 @@ function reRenderSavedJokes() {
     return;
   }
 
+  savedJokes.classList.remove("is-hidden");
+
   const listItems = jokeArr
     .map(
       (joke) =>
@@ -90,12 +100,13 @@ function saveJoke() {
     return;
   }
   jokeArr.push(currentJoke);
+  localStorage.setItem("jokeArr", JSON.stringify(jokeArr));
   reRenderSavedJokes();
   closeModal();
-  savedJokes.classList.remove("is-hidden");
 }
 
 function deleteJoke(id) {
   jokeArr = jokeArr.filter((j) => j.id != id);
+  localStorage.setItem("jokeArr", JSON.stringify(jokeArr));
   reRenderSavedJokes();
 }
