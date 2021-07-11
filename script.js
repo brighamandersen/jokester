@@ -80,7 +80,6 @@ function reRenderSavedJokes() {
         "</li>"
     )
     .join("");
-  console.log("lis", listItems);
   jokeList.innerHTML = listItems;
 }
 
