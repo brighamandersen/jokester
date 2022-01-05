@@ -69,7 +69,6 @@ async function fetchJoke() {
   }
   const response = await fetch(DAD_JOKE_URL, REQ_HEADERS);
   const resData = await response.json();
-  console.log("dadres", resData);
   currentJoke.id = resData.id;
   currentJoke.msg = resData.joke;
   return;
