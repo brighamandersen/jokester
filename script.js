@@ -4,6 +4,10 @@ REQ_HEADERS = {
   },
 };
 
+const CODING_JOKE_URL =
+  "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart";
+const DAD_JOKE_URL = "https://icanhazdadjoke.com/";
+
 const jokeModal = document.querySelector("#joke-modal");
 const jokeSubtitle = document.querySelector("#joke-subtitle");
 const jokeText = document.querySelector("#joke-text");
@@ -57,18 +61,15 @@ async function seeNewJoke(preference) {
 
 async function fetchJoke() {
   if (wantsCodingJoke) {
-    const response = await fetch(
-      "https://official-joke-api.appspot.com/jokes/programming/random",
-      REQ_HEADERS
-    );
+    const response = await fetch(CODING_JOKE_URL, REQ_HEADERS);
     let resData = await response.json();
-    resData = resData[0];
     currentJoke.id = resData.id.toString();
-    currentJoke.msg = resData.setup + "\n" + resData.punchline;
+    currentJoke.msg = resData.setup + "\n" + resData.delivery;
     return;
   }
-  const response = await fetch("https://icanhazdadjoke.com/", REQ_HEADERS);
+  const response = await fetch(DAD_JOKE_URL, REQ_HEADERS);
   const resData = await response.json();
+  console.log("dadres", resData);
   currentJoke.id = resData.id;
   currentJoke.msg = resData.joke;
   return;
